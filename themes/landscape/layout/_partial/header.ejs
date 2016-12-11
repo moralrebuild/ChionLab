@@ -91,7 +91,7 @@
                 (function(switchThemeBtn) {
                   switchThemeBtn.addEventListener('click', function(){
                     switchThemeCSS(switchThemeBtn.dataset.themeName, switchThemeBtn.dataset.cssUrl);
-                    JsCookies.set('theme', switchThemeBtn.dataset.themeName);
+                    JsCookies.set('theme', switchThemeBtn.dataset.themeName, 30);
                   });
                 })(switchThemeBtn);
               }

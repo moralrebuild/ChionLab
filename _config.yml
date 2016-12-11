@@ -76,6 +76,9 @@ deploy:
 # Disqus
 disqus_shortname: chionlab
 
+# Duoshuo
+duoshuo_shortname: chionlab
+
 # rss
 feed:
   type: atom
