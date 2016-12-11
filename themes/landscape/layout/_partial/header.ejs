@@ -1,4 +1,43 @@
 <header id="header">
+  <script>
+    var JsCookies = {
+      // this gets a cookie and returns the cookies value, if no cookies it returns blank ""
+      get: function(c_name) {
+        if (document.cookie.length > 0) {
+          var c_start = document.cookie.indexOf(c_name + "=");
+          if (c_start != -1) {
+            c_start = c_start + c_name.length + 1;
+            var c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) {
+              c_end = document.cookie.length;
+            }
+            return unescape(document.cookie.substring(c_start, c_end));
+          }
+        }
+        return "";
+      },
+
+      // this sets a cookie with your given ("cookie name", "cookie value", "good for x days")
+      set: function(c_name, value, expiredays) {
+        var exdate = new Date();
+        if (expiredays)
+          exdate.setDate(exdate.getDate() + expiredays);
+        document.cookie = c_name + "=" + escape(value) + "; path=/" + ((expiredays == undefined) ? "" : "; expires=" + exdate.toUTCString());
+      },
+
+      // this checks to see if a cookie exists, then returns true or false
+      check: function(c_name) {
+        c_name = JsCookies.get(c_name);
+        if (c_name != null && c_name != "") {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+    };
+  </script>
+
   <div id="banner"></div>
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
@@ -17,6 +56,8 @@
         <% for (var i in theme.menu){ %>
           <a class="main-nav-link" href="<%- url_for(theme.menu[i]) %>"><%= i %></a>
         <% } %>
+        <a class="main-nav-link nav-link-switch-cdn" href="//cn2.chionlab.moe" data-domain="cn2">CN2加速</a>
+        <a class="main-nav-link nav-link-switch-cdn" href="//blog.chionlab.moe" data-domain="blog">CF加速</a>
 
         <% if (theme.themes) { %>
           <div style="clear: both;"></div>
@@ -43,43 +84,6 @@
           </div>
           <script>
             (function(){
-
-              var JsCookies = {
-              	// this gets a cookie and returns the cookies value, if no cookies it returns blank ""
-              	get: function(c_name) {
-              		if (document.cookie.length > 0) {
-              			var c_start = document.cookie.indexOf(c_name + "=");
-              			if (c_start != -1) {
-              				c_start = c_start + c_name.length + 1;
-              				var c_end = document.cookie.indexOf(";", c_start);
-              				if (c_end == -1) {
-              					c_end = document.cookie.length;
-              				}
-              				return unescape(document.cookie.substring(c_start, c_end));
-              			}
-              		}
-              		return "";
-              	},
-
-              	// this sets a cookie with your given ("cookie name", "cookie value", "good for x days")
-              	set: function(c_name, value, expiredays) {
-              		var exdate = new Date();
-                  if (expiredays)
-              		  exdate.setDate(exdate.getDate() + expiredays);
-              		document.cookie = c_name + "=" + escape(value) + "; path=/" + ((expiredays == undefined) ? "" : "; expires=" + exdate.toUTCString());
-              	},
-
-              	// this checks to see if a cookie exists, then returns true or false
-              	check: function(c_name) {
-              		c_name = JsCookies.get(c_name);
-              		if (c_name != null && c_name != "") {
-              			return true;
-              		} else {
-              			return false;
-              		}
-              	}
-
-              };
 
               function switchThemeCSS(themeName, cssUrl) {
                 document.querySelector('head').querySelectorAll('link[rel=stylesheet]')[1].href = cssUrl;
@@ -117,4 +121,50 @@
       </div>
     </div>
   </div>
+  <script>
+    function getGeolocation(geoInfo) {
+      if (geoInfo.country_code === 'CN') {
+        $.confirm({
+          title: '线路优化建议',
+          content: '检测到您是境内用户，为了提高您的访问体验，是否切换到国内优化线路？',
+          buttons: {
+            '好的': function() {
+              JsCookies.set('domain', 'cn2', 30);
+              window.location.href = '//' + 'cn2' + '.' + rootDomain + window.location.pathname;
+            },
+            '不用了': function() {
+              JsCookies.set('domain', 'blog', 30);
+            }
+          }
+        })
+      } else {
+        JsCookies.set('domain', 'blog', 30);
+      }
+    }
+    (function(){
+      var rootDomain = 'chionlab.moe';
+
+      if (!JsCookies.check('domain')) {
+        var geoLocationScript = document.createElement('script');
+        geoLocationScript.setAttribute('src','//freegeoip.net/json/?callback=getGeolocation');
+        document.head.appendChild(geoLocationScript);
+      } else {
+        if (JsCookies.get('domain') + '.' + rootDomain !== window.location.hostname) {
+          window.location.href = '//' + JsCookies.get('domain') + '.' + rootDomain + window.location.pathname;
+        }
+      }
+
+      var switchBtns = document.querySelectorAll('.nav-link-switch-cdn');
+      for (var i=0; i<switchBtns.length; i++) {
+        (function(switchBtn){
+          if (switchBtn.dataset.domain === JsCookies.get('domain')) {
+            switchBtn.style.display = 'none';
+          }
+          switchBtn.addEventListener('click', function(ev) {
+            JsCookies.set('domain', switchBtn.dataset.domain);
+          });
+        })(switchBtns[i]);
+      }
+    })();
+  </script>
 </header>
