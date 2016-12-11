@@ -124,10 +124,15 @@
   </div>
   <script>
     function getGeolocation(geoInfo) {
+      var rootDomain = 'chionlab.moe';
       if (geoInfo.country_code === 'CN') {
+        if (window.location.hostname === 'cn2' + '.' + rootDomain) {
+          JsCookies.set('domain', 'cn2', 30);
+          return;
+        }
         $.confirm({
           title: '线路优化建议',
-          content: '检测到您是境内用户，为了提高您的访问体验，是否切换到国内优化线路？',
+          content: '检测到您是境内用户，为了提高您的访问体验，是否切换到CN2线路？',
           buttons: {
             '好的': function() {
               JsCookies.set('domain', 'cn2', 30);
@@ -150,7 +155,7 @@
         geoLocationScript.setAttribute('src','//freegeoip.net/json/?callback=getGeolocation');
         document.head.appendChild(geoLocationScript);
       } else {
-        if (JsCookies.get('domain') + '.' + rootDomain !== window.location.hostname) {
+        if (JsCookies.get('domain') + '.' + rootDomain !== window.location.hostname && window.location.hostname.indexOf('localhost') === -1) {
           window.location.href = '//' + JsCookies.get('domain') + '.' + rootDomain + window.location.pathname;
         }
       }
