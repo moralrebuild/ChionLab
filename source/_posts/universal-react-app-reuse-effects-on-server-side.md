@@ -304,8 +304,23 @@ task.done.then(() => {
 
 ### 使用redux-wait-for-action来搭救
 为了将 **同构** 进行到底，博主写了一个Redux middleware来解决这个问题： [redux-wait-for-action](https://github.com/Chion82/redux-wait-for-action) 。这个代码不到80行的middleware主要实现了：在dispatch一个action时，同时指定另外一个我们期望收到的action，`store.dispatch()`返回一个promise，当这个我们期望的action到达时，该promise将resolve。
-这样，在服务端我们可以这么写：
+这样，我们可以在服务端复用`rootSaga`而不需要关心这个`rootSaga`何时结束。同时，在服务端创建的`store`，其生命周期将在http响应完成后结束，我们甚至不需要手动`cancel()`这个看似不会自发结束的`rootSaga`——交给GC来杀死它们就行了。
+我们不妨写一个在客户端和服务端通用的`configureStore()`方法来创建我们的`store`，并且执行我们的`rootSaga`：
 ```javascript
+const configureStore = (initialState) => {
+  const sagaMiddleware = createSagaMiddleware();
+  let enhancer = compose(
+    applyMiddleware(sagaMiddleware),
+    applyMiddleware(createReduxWaitForMiddleware()),
+  );
+  const store = createStore(rootReducer, initialState, enhancer);
+  sagaMiddleware.run(rootSaga);
+  return store;
+};
+```
+在服务端渲染逻辑中，我们只需要直接`dispatch()`这个action即可——这和在客户端获取数据的方式完全相同：
+```javascript
+const store = configureStore({});
 store.dispatch({
   type: 'todos/get',
   [ WAIT_FOR_ACTION ]: 'todos/get/success',
