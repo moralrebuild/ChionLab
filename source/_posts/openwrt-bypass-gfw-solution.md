@@ -12,6 +12,11 @@ categories:
 在路由器上运行ShadowSocks科学上网是最为优雅的方案。本文将介绍其安装和配置步骤。
 首先为智能路由器刷上OpenWRT，博主推荐[Pandorabox](http://downloads.openwrt.org.cn/PandoraBox/)修改版。本文将实现：连接上路由器的客户端当访问国内主机时，直接连接，而访问国外主机时，自动代理。
 
+> 2016.12.25更新：
+> openwrt shadowsocks作者已不在SourceForge上更新，大家可以直接到Github Release下载预编译包（感谢Blessing Studio博主提醒）：
+> https://github.com/shadowsocks/openwrt-shadowsocks/releases
+> 另外可以参考博主最新的 [tinc VPN策略路由](https://blog.chionlab.moe/2016/12/12/better-way-to-bypass-gfw-with-tinc/) ，使用更优雅的方式科学上网
+
 安装ShadowSocks
 --------------
 1. 因为本文讨论的是SS+ChinaDNS的翻墙方案，对于部分已集成SS+domain list的固件版本，需要先删除已安装的SS及相关工具。
@@ -21,7 +26,7 @@ $ opkg list_installed | grep shadowsocks #查询已安装的ss和相关工具
 # opkg remove shadowsocks-* #删除之
 ```
 2. 下载安装shadowsocks-libev-spec
-http://sourceforge.net/projects/openwrt-dist/files/shadowsocks-libev/
+https://github.com/shadowsocks/openwrt-shadowsocks/releases
 经作者测试，最新版在极贰最新OpenWRT固件上会出现iptables规则失效的情况，建议使用` shadowsocks-libev-spec_2.3.0-1_XXXX`版本。
 以MT7620系列为例，在路由器上运行：
 ```
