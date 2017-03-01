@@ -182,10 +182,7 @@ export function fetchList() {
   return request('/api/users');
 }
 ```
-看到这里，相信大家都明白了。是的，dva在这里的服务端逻辑是“直捅Service”的。嗯，这不愧是一个很好的解决方法！
-
-Are you kidding me? 这不是回到我们一开始就摒弃的方法吗。是的，dva的官方脚手架并没有解决我们的问题。
-（顺便一提，dva因为过于强调 **declarative** 和 **lightweight**，而一定程度上束缚了redux-saga的灵活性，博主甚至觉得，dva没有必要采用saga的effects，thunk足矣。此处不再展开。）
+看到这里，相信大家都明白了。dva在这里的服务端逻辑是“直捅Service”的。dva的官方脚手架并没有解决我们的问题。
 
 ### 官方建议的runSaga()
 事实上，对于redux-saga的服务端渲染问题，早就有关于这个的讨论，参考 [issue #13](https://github.com/yelouafi/redux-saga/issues/13) 。而redux-saga已添加了 [runSaga()](http://yelouafi.github.io/redux-saga/docs/api/index.html#runsagaiterator-options) 方法来实现在服务端复用saga effects。
