@@ -24,8 +24,14 @@
     </div>
     <footer class="article-footer">
       <a data-url="<%- post.permalink %>" data-id="<%= post._id %>" class="article-share-link">分享</a>
-      <% if (post.comments && config.duoshuo_shortname){ %>
-        <a href="<%- post.permalink %>" class="article-duoshuo-link ds-thread-count" data-thread-key="<%= post.layout %>-<%= post.slug %>">多说</a>
+      <% if (post.comments && config.gentie_key){ %>
+        <a href="<%- post.permalink %>#cloud_tie_wrapper" class="article-comment-link gentie-comment-link" style="margin-left: 20px;">
+          <span
+            lang="join-count"
+            data-url="<%= post.permalink %>"
+          ></span>
+          <span> 跟帖</span>
+        </a>
       <% } %>
       <% if (post.comments && config.disqus_shortname){ %>
         <a href="<%- post.permalink %>#disqus_thread" class="article-comment-link disqus-comment-link">评论</a>
@@ -46,10 +52,18 @@
 </section>
 <% } %>
 
-<% if (!index && post.comments && config.duoshuo_shortname){ %>
-<section id="comments">
-  <!-- 多说评论框 start -->
-  <div class="ds-thread" data-thread-key="<%= post.layout %>-<%= post.slug %>" data-title="<%= post.title %>" data-url="<%= page.permalink %>"></div>
-  <!-- 多说评论框 end -->
+<% if (!index && post.comments && config.gentie_key && config.gentie_token){ %>
+<section id="comments" class="gentie-comments-section">
+  <div id="cloud_tie_wrapper" class="cloud-tie-wrapper"></div>
+  <script>
+    var cloudTieConfig = {
+      url: "<%= config.url %>" + document.location.pathname,
+      sourceId: "",
+      productKey: "<%= config.gentie_key %>",
+      target: "cloud_tie_wrapper"
+    };
+    var yunManualLoad = true;
+    Tie.loader("<%= config.gentie_token %>", true);
+  </script>
 </section>
 <% } %>

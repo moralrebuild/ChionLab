@@ -13,7 +13,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://blog.chionlab.moe
+url: https://blog.chionlab.moe
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -78,8 +78,10 @@ deploy:
 # Disqus
 disqus_shortname: chionlab
 
-# Duoshuo
-duoshuo_shortname: chionlab
+# Gentie
+gentie_key: 7495a9b7dca84e159d4b624ae53ec960
+gentie_token: aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s
+gentie_list_token: aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vZXh0ZW5kL2xpc3Rfam9pbl9zY3JpcHQuaHRtbA==
 
 # rss
 feed:
