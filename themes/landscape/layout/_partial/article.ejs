@@ -24,15 +24,6 @@
     </div>
     <footer class="article-footer">
       <a data-url="<%- post.permalink %>" data-id="<%= post._id %>" class="article-share-link">分享</a>
-      <% if (post.comments && config.gentie_key){ %>
-        <a href="<%- post.permalink %>#cloud_tie_wrapper" class="article-comment-link gentie-comment-link" style="margin-left: 20px;">
-          <span
-            lang="join-count"
-            data-url="<%= post.permalink %>"
-          ></span>
-          <span> 跟帖</span>
-        </a>
-      <% } %>
       <% if (post.comments && config.disqus_shortname){ %>
         <a href="<%- post.permalink %>#disqus_thread" class="article-comment-link disqus-comment-link">评论</a>
       <% } %>
@@ -49,21 +40,5 @@
   <div id="disqus_thread">
     <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
-</section>
-<% } %>
-
-<% if (!index && post.comments && config.gentie_key && config.gentie_token){ %>
-<section id="comments" class="gentie-comments-section">
-  <div id="cloud_tie_wrapper" class="cloud-tie-wrapper"></div>
-  <script>
-    var cloudTieConfig = {
-      url: "<%= config.url %>" + document.location.pathname,
-      sourceId: "",
-      productKey: "<%= config.gentie_key %>",
-      target: "cloud_tie_wrapper"
-    };
-    var yunManualLoad = true;
-    Tie.loader("<%= config.gentie_token %>", true);
-  </script>
 </section>
 <% } %>

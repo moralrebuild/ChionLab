@@ -1,7 +1,7 @@
 <% if (config.disqus_shortname){ %>
 <script>
   var disqus_shortname = '<%= config.disqus_shortname %>';
-  if (window.location.hostname.indexOf('cn2') === -1) {
+  if (/*window.location.hostname.indexOf('cn2') === -1*/true) {
     <% if (page.permalink){ %>
     var disqus_url = '<%= page.permalink %>';
     <% } %>
@@ -28,13 +28,6 @@
     }
   }
 </script>
-<% } %>
-
-<% if (config.gentie_key && config.gentie_list_token){ %>
-  <script>
-    var yunTieProductKey = "<%= config.gentie_key %>";
-    Tie.loader("<%= config.gentie_list_token %>", true);
-  </script>
 <% } %>
 
 <% if (theme.fancybox){ %>
